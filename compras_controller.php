@@ -1,20 +1,20 @@
 <?php
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-    cadastra_endereco();
+    cadastra_compra();
 }elseif ($_SERVER['REQUEST_METHOD'] === 'GET'){
-    lista_enderecos();
+    lista_compras();
 }elseif($_SERVER['REQUEST_METHOD'] === 'PUT'){
-    altera_endereco($_SERVER['PATH_INFO']);
+    altera_compra($_SERVER['PATH_INFO']);
 }elseif($_SERVER['REQUEST_METHOD'] === 'DELETE'){
-    deleta_endereco($_SERVER['PATH_INFO']);
+    deleta_compra($_SERVER['PATH_INFO']);
 }
 
-function lista_enderecos(){
+function lista_compras(){
     $con = mysqli_connect('localhost','root','');
     mysqli_select_db($con,'e_comerce');
 
-    $query = "SELECT * from enderecos";
+    $query = "SELECT * from compras";
     $result = mysqli_query($con,$query);
 
     if($result){
@@ -37,24 +37,21 @@ function lista_enderecos(){
 
 }
 
-function cadastra_endereco(){
-    $usuario = $_POST['usuario'];
-    $rua = $_POST['rua'];
-    $numero = $_POST['numero'];
-    $bairro = $_POST['bairro'];
-    $cidade = $_POST['cidade'];
-    $estado = $_POST['estado'];
-    $telefone = $_POST['telefone'];
-/*
+function cadastra_compra(){
+    $id = rand(0,999);
+    $endereco = $_POST['endereco'];
+    $data = $_POST['data'];
+    
+
     $con = mysqli_connect('localhost','admin','');
     mysqli_select_db('e_comerce', $con);
 
-    $query = "INSERT INTO produtos (descricao, valor_unitario) VALUES (".$valor_unitario.", ".$d.");";
+    $query = "INSERT INTO compras (id, endereco_id, data) VALUES ($id, $endereco, $data);";
     $result = mysqli_query($query);
 
     echo $result;
     mysqli_close($con);
-    */
+    
 } 
 
 ?>

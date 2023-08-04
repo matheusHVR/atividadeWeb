@@ -40,11 +40,12 @@ function lista_produtos(){
 function cadastra_produto(){
     $descricao = $_POST['descricao'];
     $valor_unitario = $_POST['valor_unitario'];
+    $id = rand(0,999);
 
     $con = mysqli_connect('localhost','admin','');
     mysqli_select_db('e_comerce', $con);
 
-    $query = "INSERT INTO produtos (descricao, valor_unitario) VALUES (".$valor_unitario.", ".$d.");";
+    $query = "INSERT INTO produtos (id, descricao, valor_unitario) VALUES ($id, $descricao, $valor_unitario);";
     $result = mysqli_query($query);
 
     echo $result;
@@ -52,6 +53,12 @@ function cadastra_produto(){
 } 
 
 function altera_produto($id){
+    $data = file_get_contents("php://input");
+    $decodedData = json_decode($data, true);
+    $id = $decodedData[¨id¨];
+    $descricao = $decodedData[¨descricao¨];
+    $valor_unitario = $decodedData[¨valor_unitario¨];
+    header("Content-Type: application/json");
 
     $con = mysqli_connect('localhost','admin','');
     mysqli_select_db('e_comerce', $con);
@@ -64,6 +71,12 @@ function altera_produto($id){
 }
 
 function deleta_produto($id){
+
+    $data = file_get_contents("php://input");
+    $decodedData = json_decode($data, true);
+    $id = $decodedData[¨id¨];
+    header("Content-Type: application/json");
+   
     $con = mysqli_connect('localhost','admin','');
     mysqli_select_db('e_comerce', $con);
 
