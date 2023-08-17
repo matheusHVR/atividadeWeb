@@ -43,10 +43,10 @@ function cadastra_produto(){
     $id = rand(0,999);
 
     $con = mysqli_connect('localhost','admin','');
-    mysqli_select_db('e_comerce', $con);
+    mysqli_select_db($con,`e_comerce`);
 
     $query = "INSERT INTO produtos (id, descricao, valor_unitario) VALUES ($id, $descricao, $valor_unitario);";
-    $result = mysqli_query($query);
+    $result = mysqli_query($con,$query);
 
     echo $result;
     mysqli_close($con);
@@ -55,16 +55,16 @@ function cadastra_produto(){
 function altera_produto($id){
     $data = file_get_contents("php://input");
     $decodedData = json_decode($data, true);
-    $id = $decodedData[¨id¨];
-    $descricao = $decodedData[¨descricao¨];
-    $valor_unitario = $decodedData[¨valor_unitario¨];
+    $id = $decodedData[`id`];
+    $descricao = $decodedData[`descricao`];
+    $valor_unitario = $decodedData[`valor_unitario`];
     header("Content-Type: application/json");
 
     $con = mysqli_connect('localhost','admin','');
-    mysqli_select_db('e_comerce', $con);
+    mysqli_select_db($con,`e_comerce`);
 
     $query = "UPDATE produtos SET descricao = $descricao , valor_unitario = $valor_unitario WHERE id = $id;";
-    $result = mysqli_query($query);
+    $result = mysqli_query($con,$query);
 
     echo $result;
     mysqli_close($con);
@@ -74,14 +74,14 @@ function deleta_produto($id){
 
     $data = file_get_contents("php://input");
     $decodedData = json_decode($data, true);
-    $id = $decodedData[¨id¨];
+    $id = $decodedData[`id`];
     header("Content-Type: application/json");
    
     $con = mysqli_connect('localhost','admin','');
-    mysqli_select_db('e_comerce', $con);
+    mysqli_select_db($con,`e_comerce`);
 
     $query = "DELETE FROM produtos WHERE id = $id;";
-    $result = mysqli_query($query);
+    $result = mysqli_query($con,$query);
 
     echo $result;
     mysqli_close($con);

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css">
+    <title>Cadastro de compras</title>
+</head>
+<body>
+    <h1>Compras</h1>
+
+    <a href="/atividadeWeb/paginas/produtos.html">produtos</a>
+    <a href="/atividadeWeb/paginas/enderecos.html">enderecos</a>
+    <a href="/atividadeWeb/paginas/compras.html">compras</a><br>
+
+    <form method="post" action="/atividadeWeb/controllers/compras_controller.php">
+        <label for="data">Data da compra:</label>
+        <input type="date" name="data"><br>
+        <input type="submit" value="enviar">
+    </form>
+    <div>
+        <table id="tabela">
+            <tr>
+                <th>id endereco</th>
+                <th>Data</th>
+                <th>alterar</th>
+                <th>deletar</th>
+            </tr>
+        </table>
+    </div>
+    <script src="/atividadeWeb/scripts/compras.js"></script>
+</body>
+</html>
