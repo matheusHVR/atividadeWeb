@@ -1,13 +1,20 @@
 <?php
+header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-    cadastra_compra();
+    $dadosRecebidos = file_get_contents('php://input');
+    $dadosDecodificados = json_decode($dadosRecebidos, true);
+    cadastra_compra($dadosDecodificados);
 }elseif ($_SERVER['REQUEST_METHOD'] === 'GET'){
     lista_compras();
 }elseif($_SERVER['REQUEST_METHOD'] === 'PUT'){
-    altera_compra($_SERVER['PATH_INFO']);
+    $dadosRecebidos = file_get_contents('php://input');
+    $dadosDecodificados = json_decode($dadosRecebidos, true);
+    altera_compra($dadosDecodificados);
 }elseif($_SERVER['REQUEST_METHOD'] === 'DELETE'){
-    deleta_compra($_SERVER['PATH_INFO']);
+    $dadosRecebidos = file_get_contents('php://input');
+    $dadosDecodificados = json_decode($dadosRecebidos, true);
+    deleta_compra($dadosDecodificados);
 }
 
 function lista_compras(){
@@ -26,7 +33,6 @@ function lista_compras(){
         }
         $json_dados = json_encode($rows);
 
-        header('Content-Type: application/json');
 
         echo $json_dados;
     }else{
@@ -37,21 +43,41 @@ function lista_compras(){
 
 }
 
-function cadastra_compra(){
+function cadastra_compra($compra){
+    echo json_encode($compra);
     $id = rand(0,999);
-    $endereco = $_POST['endereco'];
-    $data = $_POST['data'];
+    $endereco = $compra['endereco'];
+    $endereco_id = intval($endereco);
+    $data = $compra['data'];
     
 
-    $con = mysqli_connect('localhost','admin','');
-    mysqli_select_db('e_comerce', $con);
+    $con = mysqli_connect('localhost','root','');
+    mysqli_select_db($con,'e_comerce');
 
-    $query = "INSERT INTO compras (id, endereco_id, data) VALUES ($id, $endereco, $data);";
-    $result = mysqli_query($query);
+    $query = "INSERT INTO compras (id, endereco_id, data) VALUES ($id, $endereco_id, '$data');";
+    $result = mysqli_query($con,$query);
 
-    echo $result;
+    echo json_encode(array('erro'=>mysqli_error($con),'resultado'=>$result));
     mysqli_close($con);
     
-} 
+}
+
+function altera_compra($compra){
+
+}
+
+function deleta_compra($compra){
+    $id = $compra['id'];
+    $id = intval($id);
+   
+    $con = mysqli_connect('localhost','root','');
+    mysqli_select_db($con,'e_comerce');
+
+    $query = "DELETE FROM compras WHERE id = $id;";
+    $result = mysqli_query($con,$query);
+
+    echo json_encode(array('erro'=>mysqli_error($con),'resultado'=>$result));
+    mysqli_close($con);
+}
 
 ?>

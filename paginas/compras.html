@@ -3,25 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css">
+    <link rel="stylesheet" href="/atividadeWeb/style.css">
     <title>Cadastro de compras</title>
 </head>
 <body>
-    <h1>Compras</h1>
+    <h1>e-comerce</h1>
 
     <a href="/atividadeWeb/paginas/produtos.html">produtos</a>
     <a href="/atividadeWeb/paginas/enderecos.html">enderecos</a>
     <a href="/atividadeWeb/paginas/compras.html">compras</a><br>
+    
+    <h2>Compras</h2>
 
-    <form method="post" action="/atividadeWeb/controllers/compras_controller.php">
+    <form method="post">
+        <label for="endereco">Endereco</label>
+        <select id="endereco">
+            <option value="">Selecione</option>
+        </select><br>
         <label for="data">Data da compra:</label>
-        <input type="date" name="data"><br>
-        <input type="submit" value="enviar">
+        <input type="date" id="data"><br>
+        <button onclick="cadastraCompra()">enviar</button>
     </form>
+    
     <div>
         <table id="tabela">
             <tr>
-                <th>id endereco</th>
+                <th>id</th>
+                <th>id_endereco</th>
                 <th>Data</th>
                 <th>alterar</th>
                 <th>deletar</th>

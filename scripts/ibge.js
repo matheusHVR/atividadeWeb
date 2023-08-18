@@ -5,7 +5,6 @@ async function carregarEstados() {
     const response = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados')
 
     const estados = await response.json();
-    console.log(estados);
 
     preencherSelectEstados(estados);
 }
@@ -55,7 +54,6 @@ async function carregarCidades() {
     const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estado_id}/municipios`);
 
     const cidades = await response.json();
-    console.log(cidades);
 
     preencherSelectCidades(cidades);
 
@@ -72,7 +70,6 @@ function preencherSelectCidades(cidades) {
         const option = document.createElement("option");
 
         option.value = nome;
-        option.tagName = `cidade`;
         option.innerHTML = nome;
 
         selectCidades.appendChild(option);
