@@ -59,17 +59,17 @@ function cadastra_produto($produto){
     mysqli_close($con);
 } 
 
-function altera_produto($id){
-    $data = file_get_contents("php://input");
-    $decodedData = json_decode($data, true);
-    $id = $decodedData[`id`];
-    $descricao = $decodedData[`descricao`];
-    $valor_unitario = $decodedData[`valor_unitario`];
+function altera_produto($produto){
+    $id = $produto['id'];
+    $id = intval($id);
+    $descricao = $produto['descricao'];
+    $valor_unitario = $produto['valor_unitario'];
+    $valor_string = floatval($valor_unitario);
 
     $con = mysqli_connect('localhost','root','');
-    mysqli_select_db($con,`e_comerce`);
+    mysqli_select_db($con,'e_comerce');
 
-    $query = "UPDATE produtos SET descricao = $descricao , valor_unitario = $valor_unitario WHERE id = $id;";
+    $query = "UPDATE produtos SET desccricao = '$descricao', valor_unitario = $valor_string WHERE id = $id;";
     $result = mysqli_query($con,$query);
 
     echo json_encode(array('erro'=>mysqli_error($con),'resultado'=>$result));

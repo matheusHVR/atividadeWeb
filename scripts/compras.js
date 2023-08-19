@@ -17,24 +17,44 @@ async function imprimeCompras(){
         let th0 = document.createElement(`th`);
         let th1 = document.createElement(`th`);
         let th2 = document.createElement(`th`);
+        let input_endereco = document.createElement(`select`);
+        let selected = document.createElement(`option`);
+        let input_data = document.createElement(`input`);
+        input_data.setAttribute(`type`,`date`);
+        input_endereco.setAttribute(`disabled`,true);
+        input_data.setAttribute(`disabled`,true);
+
+        input_endereco.className = `endereco`;
+        input_endereco.id = id+`endereco`;
+        input_data.id = id+`data`;
 
         th0.innerHTML = id;
-        th1.innerHTML = endereco;
-        th2.innerHTML = data;
+        selected.innerHTML = endereco;
+        selected.value = endereco;
+        input_endereco.value = endereco;
+        input_data.value = data;
+
+        input_endereco.appendChild(selected);
+        th1.appendChild(input_endereco);
+        th2.appendChild(input_data);
 
         tr.appendChild(th0);
         tr.appendChild(th1);
         tr.appendChild(th2);
 
         let atualiza = document.createElement(`button`);
+        let confirma = document.createElement(`button`);
         let deleta = document.createElement(`button`);
-        atualiza.setAttribute(`onClick`,`alteraCompra(${id})`);
+        atualiza.setAttribute(`onClick`,`permiteEdicao(${id})`);
+        confirma.setAttribute(`onClick`,`alteraCompra(${id})`);
         deleta.setAttribute(`onClick`,`deletaCompra(${id})`);
         atualiza.innerHTML = `alterar`;
+        confirma.innerHTML = `contirma alteracao`;
         deleta.innerHTML = `deletar`;
         let tdAtualiza = document.createElement('th');
         let tdDeleta = document.createElement('th');
         tdAtualiza.appendChild(atualiza);
+        tdAtualiza.appendChild(confirma);
         tdDeleta.appendChild(deleta);
         tr.appendChild(tdAtualiza);
         tr.appendChild(tdDeleta);
@@ -48,23 +68,26 @@ async function listaEnderecos(){
     const dados = await consulta.json();
     console.log(dados);
 
-    let select = document.getElementById(`endereco`);
+    let select = document.querySelectorAll(`.endereco`);
     for(let dado of dados) {
 
-        let enderecos = [];
-        enderecos[0] = dado.estado;
-        enderecos[1] = dado.cidade;
-        enderecos[2] = dado.rua;
-        enderecos[3] = dado.numero;
-        enderecos[4] = dado.bairro;
-        enderecos[5] = dado.telefone;
+      let enderecos = [
+        dado.id,
+        dado.estado, 
+        dado.cidade, 
+        dado.rua, 
+        dado.numero, 
+        dado.bairro, 
+        dado.telefone
+      ];
+      let enderecoTexto = enderecos.join(", ");
 
-        let option = document.createElement(`option`); 
-        option.value = dado.id;
-        for (let i = 0; i<6;++i){
-            option.innerHTML += `${enderecos[i]}, `;
-        }
-        select.appendChild(option);
+        select.forEach(function(elemento){
+          let option = document.createElement(`option`); 
+          option.innerHTML = enderecoTexto;
+          option.value = dado.id;
+          elemento.appendChild(option);
+        });
  
     }
 }
@@ -77,6 +100,7 @@ async function cadastraCompra(){
         endereco: endereco,
         data: data
     }
+    console.log(dados);
     fetch(`/atividadeWeb/controllers/compras_controller.php`, {
         method: 'POST',
         headers: {
@@ -94,11 +118,44 @@ async function cadastraCompra(){
       });
 }
 
-function alteraCompra(){
-    
+function permiteEdicao(id){
+  document.getElementById(id+`endereco`).disabled = false;
+  document.getElementById(id+`data`).disabled = false;
+}
+
+function alteraCompra(id){
+  endereco = document.getElementById(id+`endereco`);
+  data = document.getElementById(id+`data`);
+  if(confirm(`certeza que deseja alterar esse registro?`)){
+    const dado = {
+        id: id,
+        endereco: endereco.value,
+        data: data.value
+    }
+    fetch(`/atividadeWeb/controllers/compras_controller.php`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          // Se o servidor requer autenticação, você pode adicionar cabeçalhos de autorização aqui
+        },
+        body: JSON.stringify(dado)
+      })
+      .then(response => response.json())
+      .then(dado => {
+        console.log('Resposta do servidor:', data);
+        endereco.disabled = true;
+        data.disabled = true;
+      })
+      .catch(error => {
+        console.error('Ocorreu um erro:', error);
+      });
+  }else{
+    endereco.disabled = true;
+    data.disabled = true;
+  }
 }
 function deletaCompra(id){
-
+  if(confirm(`certeza que deseja deletar esse registro?`)){
     const data = {
         id: id
     }
@@ -117,5 +174,5 @@ function deletaCompra(id){
       .catch(error => {
         console.error('Ocorreu um erro:', error);
       });
-
+  }
 }

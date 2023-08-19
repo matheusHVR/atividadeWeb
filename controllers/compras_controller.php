@@ -63,7 +63,20 @@ function cadastra_compra($compra){
 }
 
 function altera_compra($compra){
+    $id = $compra['id'];
+    $id = intval($id);
+    $endereco_id = $compra['endereco'];
+    $endereco_id = intval($endereco_id);
+    $data = $compra['data'];
 
+    $con = mysqli_connect('localhost','root','');
+    mysqli_select_db($con,'e_comerce');
+
+    $query = "UPDATE compras SET endereco_id = $endereco_id, data = '$data' WHERE id = $id;";
+    $result = mysqli_query($con,$query);
+
+    echo json_encode(array('erro'=>mysqli_error($con),'resultado'=>$result));
+    mysqli_close($con);
 }
 
 function deleta_compra($compra){
